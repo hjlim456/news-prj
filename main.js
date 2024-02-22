@@ -28,7 +28,8 @@ const getNewsByCategory = async (e)=> {
     const category = e.target.textContent.toLowerCase();
     console.log(category)
     // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`)//new api 사용
-    const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?category=${category}`)// 사용
+    // const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?category=${category}`)// 사용
+    const url = new URL(`https://hj-news.netlify.app/top-headlines?category=${category}`)
 
     callApiData(url)
 
@@ -107,7 +108,8 @@ const render = ( ) =>{
 const getNewsByKeyword = async( )=> {
     let keyword = document.getElementById("search-input").value;
     // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`) //news api
-    const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?q=${keyword}`)
+    // const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?q=${keyword}`)
+    const url = new URL(`https://hj-news.netlify.app/top-headlines?q=${keyword}`)
 
     callApiData(url)
 }
