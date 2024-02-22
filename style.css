@@ -9,7 +9,6 @@
 
 .menus{
     margin-top: 1em;
-    display: flex;
     justify-content: center;
     flex-wrap: wrap;
 
@@ -107,7 +106,6 @@
   }
 
 .icon-area{
-    margin-left: 2em;
     
 
     

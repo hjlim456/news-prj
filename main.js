@@ -3,17 +3,55 @@
 
 const API_KEY = "72f346a1d9624ee8b8e4625ec3216c7e"
 let newsList = [];
+let menus = document.querySelectorAll(".menus button");
+let searchInput = document.getElementById("search-input")
+
+menus.forEach(menu=>{
+    menu.addEventListener("click", (e)=>getNewsByCategoty(e))
+})
+
+
+
+//api를 호출하는 함수를 추출했다
+async function callApiData(url){
+
+    const response = await fetch(url);
+    const data = await response.json();
+    newsList = data.articles
+    render()
+
+}
+
+
+const getNewsByCategoty = async (e)=> {
+
+    const category = e.target.textContent;
+    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`)
+
+    callApiData(url)
+
+}
+//엔터치면 검색되게하기
+searchInput.addEventListener("keydown", function(e){
+    if(e.key == "Enter"){
+        getNewsByKeyword()
+    }
+})
+
+const getNewsByKeyword = async( )=> {
+    let keyword = document.getElementById("search-input").value;
+    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`)
+
+    callApiData(url)
+}
 
 const getLatestNews = async()=>{
 
-    // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
+    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
     // const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
-    const url = new URL(`https://hj-news.netlify.app/top-headlines`)
+    // const url = new URL(`https://hj-news.netlify.app/top-headlines`)
 
-    const response = await fetch(url)
-    const data = await response.json()
-    newsList = data.articles;
-    render()
+    callApiData(url)
     console.log("nnn",newsList)
  
 
@@ -40,9 +78,7 @@ const openSearchBox = ( )=> {
         inputArea.classList.add("hide");
     }
 }
-const searchNews = ( )=> {
 
-}
 
 
 
