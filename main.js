@@ -7,7 +7,7 @@ let menus = document.querySelectorAll(".menus button");
 let searchInput = document.getElementById("search-input")
 
 menus.forEach(menu=>{
-    menu.addEventListener("click", (e)=>getNewsByCategoty(e))
+    menu.addEventListener("click", (e)=>getNewsByCategory(e))
 })
 
 
@@ -23,36 +23,26 @@ async function callApiData(url){
 }
 
 
-const getNewsByCategoty = async (e)=> {
+const getNewsByCategory = async (e)=> {
 
-    const category = e.target.textContent;
-    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`)
+    const category = e.target.textContent.toLowerCase();
+    console.log(category)
+    // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`)//new api 사용
+    const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?category=${category}`)// 사용
 
     callApiData(url)
 
 }
-//엔터치면 검색되게하기
-searchInput.addEventListener("keydown", function(e){
-    if(e.key == "Enter"){
-        getNewsByKeyword()
-    }
-})
 
-const getNewsByKeyword = async( )=> {
-    let keyword = document.getElementById("search-input").value;
-    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`)
 
-    callApiData(url)
-}
-
+//뉴스호출하기
 const getLatestNews = async()=>{
 
-    const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
-    // const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
+    // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
+    const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines`)
     // const url = new URL(`https://hj-news.netlify.app/top-headlines`)
 
     callApiData(url)
-    console.log("nnn",newsList)
  
 
 }
@@ -111,3 +101,18 @@ const render = ( ) =>{
     document.getElementById("news-board").innerHTML = newsHTML
 
 }
+
+
+const getNewsByKeyword = async( )=> {
+    let keyword = document.getElementById("search-input").value;
+    // const url = new URL(`https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`) //news api
+    const url = new URL(`http://times-node-env.eba-appvq3ef.ap-northeast-2.elasticbeanstalk.com/top-headlines?q=${keyword}`)
+
+    callApiData(url)
+}
+//엔터치면 검색되게하기
+searchInput.addEventListener("keydown", function(e){
+    if(e.key == "Enter"){
+        getNewsByKeyword()
+    }
+})
