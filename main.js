@@ -38,17 +38,9 @@ const getLatestNews = async()=>{
     }catch(error){
         errorRender(error.message)
     }
-
- 
-
-  
-
-
-  
-   
- 
-
 }
+
+
 getLatestNews()
 
 
@@ -130,7 +122,7 @@ const getNewsByCategory = async (e)=> {
 }
 
 
-//키워드내용대로  api호출
+//키워드로 검색한 내용  api호출
 const getNewsByKeyword = async( )=> {
     let keyword = document.getElementById("search-input").value;
     // url = new URL(`https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`) //news api
