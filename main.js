@@ -1,26 +1,41 @@
 const API_KEY = "72f346a1d9624ee8b8e4625ec3216c7e";
 let newsList = [];
 let menus = document.querySelectorAll(".menus button");
+let sideMenus = document.querySelectorAll(".side-menu-list button");
 let searchInput = document.getElementById("search-input");
+
+let totalResults = 0;
+let page = 1;
+const pageSize =10;
+const groupSize= 5;
+let totalPages = 1;
+
 // let url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
 let url = new URL(`https://hj-news.netlify.app/top-headlines`);
 
 menus.forEach((menu) => {
   menu.addEventListener("click", (e) => getNewsByCategory(e));
 });
+sideMenus.forEach((menu) => {
+  menu.addEventListener("click", (e) => getNewsByCategory(e));
+});
 
 //뉴스호출하기
 const getLatestNews = async () => {
   try {
+    url.searchParams.set("page", page)
+    url.searchParams.set("pageSize", pageSize)
     const response = await fetch(url);
     const data = await response.json();
-
+    console.log("Ddd", data)
     if (response.status === 200) {
       if (data.articles.length === 0) {
         throw new Error("검색어에 대한 뉴스가 존재하지않습니다.");
       }
       newsList = data.articles;
+      totalResults = data.totalResults;
       render();
+      paginationRender();
     } else {
       throw new Error(data.message);
     }
@@ -132,3 +147,63 @@ async function callApiData(url) {
   newsList = data.articles;
   render();
 }
+
+
+//페이지 네이션 함수
+
+const paginationRender=()=>{
+
+  //totalResults
+  //page
+  //pagesize
+  //groupSize
+
+  //totalPages
+  totalPages = Math.ceil(totalResults / pageSize)
+
+  //pageGroup 현재 페이지가 몇번쨰 그룹인지
+  const pageGroup =Math.ceil(page /groupSize)   
+  //lastPage
+  let lastPage =  groupSize* pageGroup
+  if(lastPage > totalPages){
+    lastPage = totalPages
+  }
+  //firstPage
+  const firstPage = lastPage - (groupSize -1) <=0 ? 1 : lastPage - (groupSize -1)
+
+
+  let paginationHTML =` 
+  <li class="page-item ${page===1?"d-none" :''}" onclick=moveToPage(1)><a class="page-link" href="#">&lt&lt</a></li>
+  <li class="page-item ${page===1?"d-none" :''}" onclick=moveToPage(page-1)><a class="page-link" href="#">&lt</a></li>
+  `
+  
+  for(let i = firstPage ; i<=lastPage ; i++){
+    paginationHTML +=   `<li class="page-item ${i===page ? "active" : ''} " onclick=moveToPage(${i})><a class="page-link" href="#">${i}</a></li>`
+  }
+
+  paginationHTML +=` 
+  <li class="page-item ${page===lastPage?"d-none" :''}" onclick=moveToPage(page+1)><a class="page-link" href="#">&gt</a></li>
+  <li class="page-item ${page===totalPages?"d-none" :''}" onclick=moveToPage(totalPages)><a class="page-link" href="#">&gt&gt</a></li>
+  `
+
+
+  document.querySelector(".pagination").innerHTML = paginationHTML
+
+}
+
+//onclic 이벤트시 발생하는 함수
+const moveToPage=(pageNum)=>{
+  page=pageNum
+  getLatestNews()
+}
+
+
+{/* <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav> */}
